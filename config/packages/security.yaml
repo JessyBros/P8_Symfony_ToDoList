@@ -1,11 +1,13 @@
 security:
     encoders:
-        App\Entity\User: bcrypt
+        App\Entity\User:
+            algorithm: bcrypt
 
     providers:
-        doctrine:
+       in_memory: { memory: ~ }
+       in_database:
             entity:
-                class: App:User
+                class: App\Entity\User
                 property: username
 
     firewalls:
@@ -15,14 +17,13 @@ security:
 
         main:
             anonymous: ~
-            pattern: ^/
+            provider: in_database
             form_login:
                 login_path: login
-                check_path: login_check
-                always_use_default_target_path:  true
-                default_target_path:  /
-            logout: ~
-            logout_on_user_change: true
+                check_path: login
+            logout: 
+                path: logout
+                target: login
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
