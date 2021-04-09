@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\AppBundle\Entity;
+namespace App\Tests\Entity;
 
-use AppBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;
 
@@ -21,7 +21,7 @@ class UserTest extends KernelTestCase
     public function assertHasErrors(User $code, int $number = 0)
     {
         self::bootKernel();
-        $errors = self::$kernel->getContainer()->get("validator")->validate($code);
+        $errors = self::$container->get("validator")->validate($code);
         
         $messages = [];
         /** @var ConstraintViolation $error */

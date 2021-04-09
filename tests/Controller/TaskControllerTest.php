@@ -2,23 +2,34 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\TaskFixtures;
+use App\DataFixtures\UserFixtures;
+use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaskControllerTest extends WebTestCase
 {
 
-    public function getClient()
+    use FixturesTrait;
+
+    public function getClientLoginAsUser()
     {
-        return $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'user',
-            'PHP_AUTH_PW'   => 'password',
-        ));
+        $client = static::createClient();
+
+        $this->loadFixtures([UserFixtures::class, TaskFixtures::class]);
+        $userRepository = static::$container->get(UserRepository::class);
+        $testUser = $userRepository->findOneByUsername('user1');
+        
+        return $client->loginUser($testUser);
     }
+
 
     public function testViewListTask()
     {
-        $client = $this->getClient();
+        $client = $this->getClientLoginAsUser();
 
         $crawler = $client->request('GET', '/tasks');
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -26,53 +37,61 @@ class TaskControllerTest extends WebTestCase
 
     public function testCreateTask()
     {
-        $client = $this->getClient();
+        $client = $this->getClientLoginAsUser();
         
         $crawler = $client->request('GET', '/tasks/create');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Ajouter')->form([
-            'task[title]' => 'titre',
-            'task[content]' => 'contenu'
+            'task[title]' => 'newTitre',
+            'task[content]' => 'newContenu'
         ]);
 
         $client->submit($form);
-        $client->followRedirect();
-        
+        $crawler = $client->followRedirect();
+        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a été bien été ajoutée.");        
     }
     
     public function testEditTask()
     {
-        $client = $this->getClient();
+        $client = $this->getClientLoginAsUser();
         
         $crawler = $client->request('GET', '/tasks/1/edit');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Modifier')->form([
-            'task[title]' => 'titre',
-            'task[content]' => 'contenu'
+            'task[title]' => 'updateTitre',
+            'task[content]' => 'updateContenu'
         ]);
 
         $client->submit($form);
-        $client->followRedirect();
+        $crawler = $client->followRedirect();
+        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été modifiée.");
     }
 
-    /*public function testToggleTask()
+    public function testToggleTask()
     {
-        $client = $this->getClient();
+        $client = $this->getClientLoginAsUser();
         
         $crawler = $client->request('GET', '/tasks/1/toggle');
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+        $crawler = $client->followRedirect();
 
-        $form = $crawler->selectButton('Marquer non terminée')->form([
-            'task[isDone]' => false
-        ]);
-
-        $client->submit($form);
-        $client->followRedirect();
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
+        
     }
 
     public function testDeleteTask()
     {
-    }*/
+        $client = $this->getClientLoginAsUser();
+        
+        $crawler = $client->request('GET', '/tasks/1/delete');
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+        $crawler = $client->followRedirect();
+
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été supprimée.");
+    }
     
 }
