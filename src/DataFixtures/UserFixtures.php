@@ -26,6 +26,7 @@ class UserFixtures extends Fixture
         $admin->setUsername("admin");
         $admin->setPassword($this->hashPassword("password"));
         $admin->setEmail("admin@hotmail.fr");
+        $admin->setRoles(["ROLE_ADMIN"]);
         $manager->persist($admin);
 
         for ($i = 0; $i < 3; $i++) {
@@ -33,6 +34,7 @@ class UserFixtures extends Fixture
             $user->setUsername('user'.$i);
             $user->setPassword($this->hashPassword("password"));
             $user->setEmail("user".$i."@hotmail.fr");
+            $user->setRoles(["ROLE_USER"]);
             $manager->persist($user);
         }
 
