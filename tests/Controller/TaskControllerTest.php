@@ -34,6 +34,14 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
+    public function testViewListTaskDone()
+    {
+        $client = $this->getClientLoginAsUser();
+
+        $crawler = $client->request('GET', '/tasks-done');
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+    }
+
     public function testCreateTask()
     {
         $client = $this->getClientLoginAsUser();
