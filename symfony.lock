@@ -1,16 +1,4 @@
 {
-    "behat/behat": {
-        "version": "v3.8.1"
-    },
-    "behat/gherkin": {
-        "version": "v4.8.0"
-    },
-    "behat/mink": {
-        "version": "v1.8.1"
-    },
-    "behat/transliterator": {
-        "version": "v1.3.0"
-    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -288,9 +276,6 @@
             "./bin/console",
             "./config/bootstrap.php"
         ]
-    },
-    "symfony/css-selector": {
-        "version": "v5.0.11"
     },
     "symfony/debug-bundle": {
         "version": "4.1",
