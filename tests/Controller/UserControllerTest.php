@@ -45,7 +45,8 @@ class UserControllerTest extends WebTestCase
             'user[username]' => 'newUser',
             'user[password][first]' => 'password',
             'user[password][second]' => 'password',
-            'user[email]' => 'newUser@domain.fr'
+            'user[email]' => 'newUser@domain.fr',
+            'user[roles]' => 'ROLE_USER'
         ]);
 
         $client->submit($form);
