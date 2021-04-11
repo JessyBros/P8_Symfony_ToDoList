@@ -20,8 +20,7 @@ class TaskControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->loadFixtures([UserFixtures::class, TaskFixtures::class]);
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByUsername('user1');
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
         
         return $client->loginUser($testUser);
     }
@@ -32,6 +31,14 @@ class TaskControllerTest extends WebTestCase
         $client = $this->getClientLoginAsUser();
 
         $crawler = $client->request('GET', '/tasks');
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+    }
+
+    public function testViewListTaskDone()
+    {
+        $client = $this->getClientLoginAsUser();
+
+        $crawler = $client->request('GET', '/tasks-done');
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 
@@ -49,7 +56,14 @@ class TaskControllerTest extends WebTestCase
 
         $client->submit($form);
         $crawler = $client->followRedirect();
-        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a été bien été ajoutée.");        
+        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a été bien été ajoutée.");
+
+        $taskCreated = static::$container->get(TaskRepository::class)->findOneByTitle('newTitre');
+        $this->assertSame('newTitre',$taskCreated->getTitle());
+        
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
+        $this->assertSame($testUser->getId(), $taskCreated->getUser()->getId());
+
     }
     
     public function testEditTask()
