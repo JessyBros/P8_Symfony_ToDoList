@@ -13,45 +13,47 @@
         }
     },
     "require": {
-        "php": "^7.2.5",
+        "php": ">=7.4",
         "doctrine/annotations": "^1.11",
         "doctrine/doctrine-bundle": "^2.1",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "sensio/framework-extra-bundle": "^5.0",
         "symfony/apache-pack": "^1.0",
-        "symfony/asset": "^5.0",
-        "symfony/console": "^5.0",
-        "symfony/dotenv": "^5.0",
+        "symfony/asset": "5.1.*",
+        "symfony/console": "5.1.*",
+        "symfony/dotenv": "5.1.*",
         "symfony/flex": "^1.0",
-        "symfony/form": "^5.0",
-        "symfony/framework-bundle": "^5.0",
-        "symfony/mailer": "5.0.*",
+        "symfony/form": "5.1.*",
+        "symfony/framework-bundle": "5.1.*",
+        "symfony/mailer": "5.1.*",
         "symfony/messenger": "5.0.*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/polyfill-apcu": "^1.0",
-        "symfony/security-bundle": "^5.0",
-        "symfony/security-csrf": "^5.0",
-        "symfony/sendgrid-mailer": "5.0.*",
-        "symfony/stopwatch": "^5.0",
+        "symfony/security-bundle": "5.1.*",
+        "symfony/security-csrf": "5.1.*",
+        "symfony/sendgrid-mailer": "5.1.*",
+        "symfony/stopwatch": "5.1.*",
         "symfony/swiftmailer-bundle": "^3.1",
-        "symfony/translation": "^5.0",
-        "symfony/twig-bundle": "^5.0",
-        "symfony/validator": "^5.0",
-        "symfony/web-profiler-bundle": "^5.0",
-        "symfony/yaml": "^5.0",
+        "symfony/translation": "5.1.*",
+        "symfony/twig-bundle": "5.1.*",
+        "symfony/validator": "5.1.*",
+        "symfony/web-profiler-bundle": "5.1.*",
+        "symfony/yaml": "5.1.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "fakerphp/faker": "^1.13",
-        "symfony/browser-kit": "5.0.*",
-        "symfony/debug-bundle": "5.0.*",
+        "liip/test-fixtures-bundle": "^1.11",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "5.1.*",
+        "symfony/debug-bundle": "5.1.*",
         "symfony/maker-bundle": "^1.30",
-        "symfony/phpunit-bridge": "^5.0",
+        "symfony/phpunit-bridge": "^5.2",
         "symfony/profiler-pack": "^1.0",
-        "symfony/var-dumper": "5.0.*"
+        "symfony/var-dumper": "5.1.*"
     },
     "config": {
         "preferred-install": {
@@ -60,6 +62,18 @@
         "sort-packages": true
     },
     "scripts": {
+        "prepare-test": [
+            "symfony console doctrine:database:drop --if-exists --force --env=test",
+            "symfony console doctrine:database:create --env=test",
+            "symfony console doctrine:schema:update --force --env=test",
+            "symfony console doctrine:fixtures:load -n --env=test"
+        ],
+        "prepare": [
+            "symfony console doctrine:database:drop --if-exists --forcet",
+            "symfony console doctrine:database:create",
+            "symfony console doctrine:schema:update --force",
+            "symfony console doctrine:fixtures:load -n"
+        ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
@@ -78,7 +92,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "5.0.*"
+            "require": "5.1.*"
         }
     }
 }
