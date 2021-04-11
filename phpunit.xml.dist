@@ -29,7 +29,7 @@
     </filter>
     -->
 
-    <coverage processUncoveredFiles="true">
+   <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">./app</directory>
         </include>
@@ -37,6 +37,7 @@
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+        <!--<listener class="Symfony\Bridge\PhpUnit\CoverageListener" />-->
     </listeners>
 
   
