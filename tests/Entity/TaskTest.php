@@ -1,20 +1,25 @@
 <?php
 
-namespace Tests\AppBundle\Entity;
+namespace App\Tests\Entity;
 
-use AppBundle\Entity\Task;
+use App\DataFixtures\TaskFixtures;
+use App\Entity\Task;
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;
 
 class TaskTest extends KernelTestCase
 {
+
+    use FixturesTrait;
+
     public function getEntity()
     {
         $code = (new Task());
         $code->setCreatedAt(new \DateTime());
         $code->setTitle("title");
         $code->setContent("content");
-        $code->isDone();
+        $code->toggle(true);
         
         return $code;
     }
@@ -22,7 +27,8 @@ class TaskTest extends KernelTestCase
     public function assertHasErrors(Task $code, int $number = 0)
     {
         self::bootKernel();
-        $errors = self::$kernel->getContainer()->get("validator")->validate($code);
+        $this->loadFixtures([TaskFixtures::class]);
+        $errors = self::$container->get("validator")->validate($code);
         
         $messages = [];
         /** @var ConstraintViolation $error */

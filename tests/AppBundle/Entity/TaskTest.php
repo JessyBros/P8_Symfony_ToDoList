@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Tests\Entity;
+namespace Tests\AppBundle\Entity;
 
-use App\Entity\User;
+use AppBundle\Entity\Task;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;
 
-class UserTest extends KernelTestCase
+class TaskTest extends KernelTestCase
 {
     public function getEntity()
     {
-        $code = (new User());
-        $code->setUsername("username");
-        $code->setPassword("password");
-        $code->setEmail("email@domain.fr");
-
+        $code = (new Task());
+        $code->setCreatedAt(new \DateTime());
+        $code->setTitle("title");
+        $code->setContent("content");
+        $code->isDone();
+        
         return $code;
     }
 
-    public function assertHasErrors(User $code, int $number = 0)
+    public function assertHasErrors(Task $code, int $number = 0)
     {
         self::bootKernel();
-        $errors = self::$container->get("validator")->validate($code);
+        $errors = self::$kernel->getContainer()->get("validator")->validate($code);
         
         $messages = [];
         /** @var ConstraintViolation $error */
@@ -37,25 +38,17 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors($this->getEntity(),0);
     }
 
-    public function testNotBlankUsername()
+    public function testNotBlankTitle()
     {
         $code = $this->getEntity();
-        $code->setUsername("");
+        $code->setTitle("");
         $this->assertHasErrors($code,1);
     }
 
-    public function testNotBlankEmail()
+    public function testNotBlankContent()
     {
         $code = $this->getEntity();
-        $code->setEmail("");
+        $code->setContent("");
         $this->assertHasErrors($code,1);
     }
-
-    public function testInvalidEmail()
-    {
-        $code = $this->getEntity();
-        $code->setEmail("email");
-        $this->assertHasErrors($code,1);
-    }
-
 }
