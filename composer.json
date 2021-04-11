@@ -44,8 +44,6 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
-        "behat/behat": "^3.8",
-        "behat/mink": "^1.8",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "fakerphp/faker": "^1.13",
         "liip/test-fixtures-bundle": "^1.11",
