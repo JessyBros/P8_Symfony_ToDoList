@@ -18,20 +18,35 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->loadFixtures([UserFixtures::class]);
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByUsername('user1');
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
         
         return $client->loginUser($testUser);
     }
 
-    public function testViewListUser()
+    public function testSuccesfulViewListUser()
     {
-        $client = $this->getClientLoginAsUser();
+        $client = static::createClient();
+
+        $this->loadFixtures([UserFixtures::class]);
+        $testAdmin = static::$container->get(UserRepository::class)->findOneByUsername('admin');
+        $client->loginUser($testAdmin);
 
         $crawler = $client->request('GET', '/users');
+        $this->assertSame(['ROLE_ADMIN'], $testAdmin->getRoles());
+
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
+    }
+
+    public function testFailViewListUser()
+    {
+        $client = $this->getClientLoginAsUser();
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
+
+        $crawler = $client->request('GET', '/users');
+        $this->assertSame(['ROLE_USER'], $testUser->getRoles());
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     public function testCreateUser()
