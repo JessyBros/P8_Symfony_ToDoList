@@ -1,17 +1,22 @@
 <?php
 
-namespace Tests\App\Controller;
+namespace App\Tests\Controller;
 
 use App\DataFixtures\UserFixtures;
 use App\Repository\UserRepository;
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityControllerTest extends WebTestCase
 {
+    use FixturesTrait;
+
     public function testSuccessfulLogin()
     {
         $client = static::createClient();
+        $this->loadFixtures([UserFixtures::class]);
+        $userRepository = static::$container->get(UserRepository::class);
         
         $crawler = $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
@@ -45,5 +50,23 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->followRedirect();
        
         $this->assertSelectorTextContains('div.alert-danger', "Invalid credentials.");
+    }
+
+    public function testLogout()
+    {
+        $client = static::createClient();
+        $this->loadFixtures([UserFixtures::class]);
+        $userRepository = static::$container->get(UserRepository::class);
+        $testUser = $userRepository->findOneByUsername('user1');
+        $client->loginUser($testUser);
+
+        $crawler = $client->request('GET', ''); 
+        $client->clickLink('Se déconnecter');
+
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+        $crawler = $client->followRedirect();
+
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains('button.btn-success', "Se connecter");
     }
 }

@@ -15,20 +15,20 @@ class TaskTest extends KernelTestCase
 
     public function getEntity()
     {
-        $code = (new Task());
-        $code->setCreatedAt(new \DateTime());
-        $code->setTitle("title");
-        $code->setContent("content");
-        $code->toggle(true);
+        $task = new Task();
+        $task->setTitle("title");
+        $task->setContent("content");
+        $task->setCreatedAt(new \DateTime());
+        $task->isDone(false);
         
-        return $code;
+        return $task;
     }
 
-    public function assertHasErrors(Task $code, int $number = 0)
+    public function assertHasErrors(Task $task, int $number = 0)
     {
         self::bootKernel();
         $this->loadFixtures([TaskFixtures::class]);
-        $errors = self::$container->get("validator")->validate($code);
+        $errors = self::$container->get("validator")->validate($task);
         
         $messages = [];
         /** @var ConstraintViolation $error */
@@ -46,15 +46,25 @@ class TaskTest extends KernelTestCase
 
     public function testNotBlankTitle()
     {
-        $code = $this->getEntity();
-        $code->setTitle("");
-        $this->assertHasErrors($code,1);
+        $task = $this->getEntity();
+        $task->setTitle("");
+        $this->assertHasErrors($task,1);
     }
 
     public function testNotBlankContent()
     {
-        $code = $this->getEntity();
-        $code->setContent("");
-        $this->assertHasErrors($code,1);
+        $task = $this->getEntity();
+        $task->setContent("");
+        $this->assertHasErrors($task,1);
+    }
+
+    public function testCreatedAt()
+    {
+        $task = $this->getEntity();
+        
+        $date = new \DateTime();
+        $task->setCreatedAt($date);
+
+        $this->assertSame($date, $task->getCreatedAt());
     }
 }

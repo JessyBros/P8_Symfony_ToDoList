@@ -2,26 +2,34 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;
 
 class UserTest extends KernelTestCase
 {
+    
     public function getEntity()
     {
-        $code = (new User());
-        $code->setUsername("username");
-        $code->setPassword("password");
-        $code->setEmail("email@domain.fr");
+        $user = new User();
+        $user->setUsername("username");
+        $user->setPassword("password");
+        $user->setEmail("email@domain.fr");
 
-        return $code;
+        return $user;
     }
 
-    public function assertHasErrors(User $code, int $number = 0)
+    public function getTask()
+    {
+        $task = new Task();
+        return $task;
+    }
+
+    public function assertHasErrors(User $user, int $number = 0)
     {
         self::bootKernel();
-        $errors = self::$container->get("validator")->validate($code);
+        $errors = self::$container->get("validator")->validate($user);
         
         $messages = [];
         /** @var ConstraintViolation $error */
@@ -39,23 +47,35 @@ class UserTest extends KernelTestCase
 
     public function testNotBlankUsername()
     {
-        $code = $this->getEntity();
-        $code->setUsername("");
-        $this->assertHasErrors($code,1);
+        $user = $this->getEntity();
+        $user->setUsername("");
+        $this->assertHasErrors($user,1);
     }
 
     public function testNotBlankEmail()
     {
-        $code = $this->getEntity();
-        $code->setEmail("");
-        $this->assertHasErrors($code,1);
+        $user = $this->getEntity();
+        $user->setEmail("");
+        $this->assertHasErrors($user,1);
     }
 
     public function testInvalidEmail()
     {
-        $code = $this->getEntity();
-        $code->setEmail("email");
-        $this->assertHasErrors($code,1);
+        $user = $this->getEntity();
+        $user->setEmail("email");
+        $this->assertHasErrors($user,1);
+    }
+
+    public function testTasks()
+    {
+        $user = $this->getEntity();
+        $task = $this->getTask();
+
+        $user->addTask($task);
+        $this->assertCount(1, $user->getTasks());
+
+        $user->removeTask($task);
+        $this->assertCount(0, $user->getTasks());
     }
 
 }
