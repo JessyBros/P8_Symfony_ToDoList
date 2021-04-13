@@ -18,21 +18,25 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->loadFixtures([UserFixtures::class]);
-        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user');
         
         return $client->loginUser($testUser);
     }
 
-    public function testSuccesfulViewListUser()
+    public function getClientLoginAsAdmin()
     {
         $client = static::createClient();
 
         $this->loadFixtures([UserFixtures::class]);
         $testAdmin = static::$container->get(UserRepository::class)->findOneByUsername('admin');
-        $client->loginUser($testAdmin);
+        
+        return $client->loginUser($testAdmin);
+    }
 
+    public function testSuccesfulViewListUser()
+    {
+        $client = $this->getClientLoginAsAdmin();
         $crawler = $client->request('GET', '/users');
-        $this->assertSame(['ROLE_ADMIN'], $testAdmin->getRoles());
 
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
@@ -41,10 +45,7 @@ class UserControllerTest extends WebTestCase
     public function testFailViewListUser()
     {
         $client = $this->getClientLoginAsUser();
-        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
-
         $crawler = $client->request('GET', '/users');
-        $this->assertSame(['ROLE_USER'], $testUser->getRoles());
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
@@ -110,15 +111,15 @@ class UserControllerTest extends WebTestCase
 
     public function testEditUser()
     {
-        $client = $this->getClientLoginAsUser();
+        $client = $this->getClientLoginAsAdmin();
         $crawler = $client->request('GET', '/users/3/edit');
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Modifier')->form([
-            'user[username]' => 'newUser1',
+            'user[username]' => 'newUser',
             'user[password][first]' => 'password',
             'user[password][second]' => 'password',
-            'user[email]' => 'newUser1@hotmail.fr'
+            'user[email]' => 'newUser@hotmail.fr'
         ]);
 
         $client->submit($form);

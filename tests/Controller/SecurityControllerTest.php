@@ -17,7 +17,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Se connecter')->form([
-            '_username' => 'user1',
+            '_username' => 'user',
             '_password' => 'password'
         ]);
 

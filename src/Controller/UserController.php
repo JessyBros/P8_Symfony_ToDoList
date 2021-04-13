@@ -23,6 +23,7 @@ class UserController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/users/create", name="user_create")
      */
     public function createAction(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
@@ -42,9 +43,12 @@ class UserController extends AbstractController
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
-            return $this->redirectToRoute('user_list');
+            if ($this->getUser()->getRoles() == ["ROLE_ADMIN"]) {
+                return $this->redirectToRoute('user_list');
+            }
+            return $this->redirectToRoute('homepage');
         }
-
+        
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
