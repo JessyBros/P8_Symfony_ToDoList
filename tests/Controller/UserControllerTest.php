@@ -52,7 +52,7 @@ class UserControllerTest extends WebTestCase
 
     public function testCreateUser()
     {
-        $client = $this->getClientLoginAsUser();
+        $client = $this->getClientLoginAsAdmin();
 
         $crawler = $client->request('GET', '/users/create');
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -74,9 +74,17 @@ class UserControllerTest extends WebTestCase
         
     }
 
-    public function testFailCreateUserNameAlreadyExist()
+    public function testFailAccesCreateUser()
     {
         $client = $this->getClientLoginAsUser();
+        $crawler = $client->request('GET', '/users');
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+    }
+
+    public function testFailCreateUserNameAlreadyExist()
+    {
+        $client = $this->getClientLoginAsAdmin();
         $crawler = $client->request('GET', '/users/create');
 
         $form = $crawler->selectButton('Ajouter')->form([
@@ -93,7 +101,7 @@ class UserControllerTest extends WebTestCase
 
     public function testFailCreateUserEmailAlreadyExist()
     {
-        $client = $this->getClientLoginAsUser();
+        $client = $this->getClientLoginAsAdmin();
         $crawler = $client->request('GET', '/users/create');
         $this->assertResponseIsSuccessful();
     
