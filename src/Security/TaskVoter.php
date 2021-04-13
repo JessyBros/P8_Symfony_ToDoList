@@ -39,15 +39,13 @@ class TaskVoter extends Voter
             case self::MANAGE:
                 return $this->canManage($task, $user);
         }
-
         
         throw new \LogicException('This code should not be reached!');
-
     }
 
     private function canManage(Task $task, User $user)
     {
-        if ($task->getUser() == $user){
+        if ($task->getUser() == $user) {
             return true;
         }
 
