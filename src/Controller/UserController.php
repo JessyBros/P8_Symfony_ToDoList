@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class UserController extends AbstractController
 {
     /**
-     * @IsGranted("ROLE_ADMIN")
      * @Route("/users", name="user_list")
      */
     public function listAction()
@@ -23,7 +22,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
      * @Route("/users/create", name="user_create")
      */
     public function createAction(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
