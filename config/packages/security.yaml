@@ -4,7 +4,6 @@ security:
             algorithm: bcrypt
 
     providers:
-       in_memory: { memory: ~ }
        in_database:
             entity:
                 class: App\Entity\User
@@ -16,7 +15,7 @@ security:
             security: false
 
         main:
-            anonymous: ~
+            anonymous: true
             provider: in_database
             form_login:
                 login_path: login
