@@ -118,6 +118,14 @@ class TaskControllerTest extends WebTestCase
 
     }
 
+    public function testTaskNotFound()
+    {
+        $client = $this->getClientLoginAsUser();
+        
+        $crawler = $client->request('GET', '/tasks/57/edit');
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
+    }
+
     public function testToggleTask()
     {
         $client = $this->getClientLoginAsUser();

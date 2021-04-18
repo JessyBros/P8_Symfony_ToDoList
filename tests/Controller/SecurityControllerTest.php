@@ -1,17 +1,22 @@
 <?php
 
-namespace Tests\App\Controller;
+namespace App\Tests\Controller;
 
 use App\DataFixtures\UserFixtures;
 use App\Repository\UserRepository;
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class SecurityControllerTest extends WebTestCase
 {
+    use FixturesTrait;
+
     public function testSuccessfulLogin()
     {
         $client = static::createClient();
+        $this->loadFixtures([UserFixtures::class]);
+        $userRepository = static::$container->get(UserRepository::class);
         
         $crawler = $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
