@@ -51,22 +51,4 @@ class SecurityControllerTest extends WebTestCase
        
         $this->assertSelectorTextContains('div.alert-danger', "Invalid credentials.");
     }
-
-    public function testLogout()
-    {
-        $client = static::createClient();
-        $this->loadFixtures([UserFixtures::class]);
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByUsername('user1');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', ''); 
-        $client->clickLink('Se déconnecter');
-
-        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
-        $crawler = $client->followRedirect();
-
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertSelectorTextContains('button.btn-success', "Se connecter");
-    }
 }
