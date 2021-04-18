@@ -27,13 +27,15 @@ Follow the [README](https://github.com/SiProdZz/P8_Symfony_ToDoList/blob/main/RE
 - Make your changes to the code
 - Change the documentation if needed
 - Use test and check if the application still work well
+- Use ```vendor/bin/phpunit --coverage-html coverage``` and keep the coverage more than 70%
 
 ### 5- Respect the coding conventions
 
 Please follow those standards when coding in order to keep the code clean :
 
 - [PSR](https://www.php-fig.org/psr/)
-- Use [Codacy](https://www.codacy.com/) and be sure to validate your repository
+
+To help, use [PHP-CS-FIXER](https://packagist.org/packages/friendsofphp/php-cs-fixer) and [Codacy](https://www.codacy.com/) and be sure to validate your repository
 
 
 ### 6- Share your code with us
