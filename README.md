@@ -12,7 +12,7 @@ PROJECT 8 ToDoList - Upgrade the quality code and add some fonctionnality of [To
 -   Some documentations that helps manage the project
 
 ## Prerequisite in your workplace
--   Php 7.4  (x64 Non Thread Safe) or (x86 pour les versions 32 bits) <https://windows.php.net/download#php-7.4>
+-   Php 7.4  (x64 Non Thread Safe) or (x86 for 32 bits versions) <https://windows.php.net/download#php-7.4>
 -   Composer  <https://getcomposer.org/download/> (to manage dependencies and libraries)
 -   Symfony command <https://symfony.com/doc/current/the-fast-track/fr/1-tools.html#symfony-cli>
 
