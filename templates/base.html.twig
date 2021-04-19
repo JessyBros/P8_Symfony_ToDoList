@@ -35,7 +35,11 @@
                     <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
                     <div class="pull-right">
                     {% if app.user %}
+                        {% if app.user.roles == ["ROLE_ADMIN"] %}
+                            <i class="fas fa-user-tie"></i>
+                        {% else %}
                             <i class="fas fa-user"></i>
+                        {% endif %}
                             <strong>{{ app.user.username}}</strong>
                             <a href="{{ path('logout') }}" class="btn btn-danger" style="margin:10px;">Se déconnecter</a>
                     {% endif %}
