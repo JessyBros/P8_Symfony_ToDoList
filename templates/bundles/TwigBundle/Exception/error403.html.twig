@@ -1,0 +1,11 @@
+{% extends "bundles/TwigBundle/Exception/baseError.html.twig" %}
+
+{% block title %}
+    Autorisation refusée - To Do List app
+{% endblock %}
+
+{% block body %}
+    <h1>403 - Autorisation refusée !</h1>
+    <p style="margin:15px 0 25px 0;">Vous n'avez pas les droits pour accéder à cette page.</p>
+    <a href="{{ path('homepage') }}" class="btn btn-info">Page d'accueil</a>
+{% endblock %}

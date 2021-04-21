@@ -1,0 +1,11 @@
+{% extends "bundles/TwigBundle/Exception/baseError.html.twig" %}
+
+{% block title %}
+    Cette page n'existe pas - To Do List app
+{% endblock %}
+
+{% block body %}
+    <h1>404 - Cette page n'existe pas</h1>
+    <p style="margin:15px 0 25px 0;">La page que vous recherchez a peut-être été supprimée, modifiée ou est temporairement indisponible.</p>
+    <a href="{{ path('homepage') }}" class="btn btn-info">Page d'accueil</a>
+{% endblock %}
