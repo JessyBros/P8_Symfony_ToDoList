@@ -1,7 +1,21 @@
 language: php
+
 php:
   - '7.4'
 
+services:
+  - mysql
+ 
+before_install:
+  - cp .env.travis .env
+
+install:
+  - composer install
+
+before_script:
+  - php bin/console doctrine:database:create
+  - php bin/console doctrine:schema:create
+  - php bin/console doctrine:fixtures:load -n
+
 script:
-   - composer install
-   - vendor/bin/phpunit
+  - vendor/bin/phpunit
