@@ -16,7 +16,7 @@ class TaskVoter extends Voter
     protected function supports(string $attribute, $task)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::MANAGE])) {
+        if (!in_array($attribute, [self::MANAGE,"test"])) {
             return false;
         }
         
@@ -38,6 +38,7 @@ class TaskVoter extends Voter
         switch ($attribute) {
             case self::MANAGE:
                 return $this->canManage($task, $user);
+                break;
         }
         
         throw new \LogicException('This code should not be reached!');

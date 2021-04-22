@@ -75,48 +75,6 @@ class TaskControllerTest extends WebTestCase
         $this->assertSame($testUser->getId(), $taskCreated->getUser()->getId());
 
     }
-    
-    public function testEditOwnTask()
-    {
-        $client = $this->getClientLoginAsUser();
-        
-        $crawler = $client->request('GET', '/tasks/6/edit');
-        $this->assertResponseIsSuccessful();
-
-        $form = $crawler->selectButton('Modifier')->form([
-            'task[title]' => 'updateTitre',
-            'task[content]' => 'updateContenu'
-        ]);
-
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été modifiée.");
-    }
-
-    public function testFailEditNotOwnTaskUser()
-    {
-        $client = $this->getClientLoginAsUser();
-        
-        $crawler = $client->request('GET', '/tasks/1/edit');
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
-    }
-
-    public function testEditAnonymeTask()
-    {
-        $client = $this->getClientLoginAsAdmin();
-        $crawler = $client->request('GET', '/tasks/1/edit');
-        $this->assertResponseIsSuccessful();
-
-        $form = $crawler->selectButton('Modifier')->form([
-            'task[title]' => 'updateTitre',
-            'task[content]' => 'updateContenu'
-        ]);
-
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été modifiée.");
-
-    }
 
     public function testTaskNotFound()
     {
@@ -139,31 +97,28 @@ class TaskControllerTest extends WebTestCase
         
     }
 
+    public function testEditOwnTask()
+    {
+        $client = $this->getClientLoginAsUser();
+        
+        $crawler = $client->request('GET', '/tasks/6/edit');
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('Modifier')->form([
+            'task[title]' => 'updateTitre',
+            'task[content]' => 'updateContenu'
+        ]);
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été modifiée.");
+    }
+
     public function testDeleteOwnTaskUser()
     {
         $client = $this->getClientLoginAsUser();
         
         $crawler = $client->request('GET', '/tasks/6/delete');
-        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
-        $crawler = $client->followRedirect();
-
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été supprimée.");
-    }
-
-    public function testfailDeleteNotOwnTaskUser()
-    {
-        $client = $this->getClientLoginAsUser();
-        
-        $crawler = $client->request('GET', '/tasks/1/delete');
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
-    }
-
-    public function testDeleteAnonymeTask()
-    {
-        $client = $this->getClientLoginAsAdmin();
-        
-        $crawler = $client->request('GET', '/tasks/1/delete');
         $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
 
