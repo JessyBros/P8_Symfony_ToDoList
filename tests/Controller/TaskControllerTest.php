@@ -20,9 +20,19 @@ class TaskControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->loadFixtures([UserFixtures::class, TaskFixtures::class]);
-        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user');
         
         return $client->loginUser($testUser);
+    }
+
+    public function getClientLoginAsAdmin()
+    {
+        $client = static::createClient();
+
+        $this->loadFixtures([UserFixtures::class, TaskFixtures::class]);
+        $testAdmin = static::$container->get(UserRepository::class)->findOneByUsername('admin');
+        
+        return $client->loginUser($testAdmin);
     }
 
 
@@ -61,26 +71,17 @@ class TaskControllerTest extends WebTestCase
         $taskCreated = static::$container->get(TaskRepository::class)->findOneByTitle('newTitre');
         $this->assertSame('newTitre',$taskCreated->getTitle());
         
-        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user1');
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user');
         $this->assertSame($testUser->getId(), $taskCreated->getUser()->getId());
 
     }
-    
-    public function testEditTask()
+
+    public function testTaskNotFound()
     {
         $client = $this->getClientLoginAsUser();
         
-        $crawler = $client->request('GET', '/tasks/1/edit');
-        $this->assertResponseIsSuccessful();
-
-        $form = $crawler->selectButton('Modifier')->form([
-            'task[title]' => 'updateTitre',
-            'task[content]' => 'updateContenu'
-        ]);
-
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été modifiée.");
+        $crawler = $client->request('GET', '/tasks/57/edit');
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
     }
 
     public function testTaskNotFound()
@@ -104,11 +105,28 @@ class TaskControllerTest extends WebTestCase
         
     }
 
-    public function testDeleteTask()
+    public function testEditOwnTask()
     {
         $client = $this->getClientLoginAsUser();
         
-        $crawler = $client->request('GET', '/tasks/1/delete');
+        $crawler = $client->request('GET', '/tasks/6/edit');
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('Modifier')->form([
+            'task[title]' => 'updateTitre',
+            'task[content]' => 'updateContenu'
+        ]);
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+        $this->assertSelectorTextContains('div.alert-success', "Superbe ! La tâche a bien été modifiée.");
+    }
+
+    public function testDeleteOwnTaskUser()
+    {
+        $client = $this->getClientLoginAsUser();
+        
+        $crawler = $client->request('GET', '/tasks/6/delete');
         $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
         $crawler = $client->followRedirect();
 

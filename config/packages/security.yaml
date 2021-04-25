@@ -4,7 +4,6 @@ security:
             algorithm: bcrypt
 
     providers:
-       in_memory: { memory: ~ }
        in_database:
             entity:
                 class: App\Entity\User
@@ -16,7 +15,7 @@ security:
             security: false
 
         main:
-            anonymous: ~
+            anonymous: true
             provider: in_database
             form_login:
                 login_path: login
@@ -24,8 +23,11 @@ security:
             logout: 
                 path: logout
                 target: login
+    
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: IS_ANONYMOUS }
+        - { path: ^/users, roles: [ROLE_ADMIN] }
         - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] }

@@ -22,7 +22,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Se connecter')->form([
-            '_username' => 'user1',
+            '_username' => 'user',
             '_password' => 'password'
         ]);
 
@@ -32,6 +32,7 @@ class SecurityControllerTest extends WebTestCase
         
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertSelectorTextContains('h1', "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !");
+        $this->assertSelectorTextContains('strong', "user");
         $this->assertSelectorTextContains('a.btn-danger', "Se déconnecter");
 
     }

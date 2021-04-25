@@ -18,25 +18,41 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->loadFixtures([UserFixtures::class]);
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByUsername('user1');
+        $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user');
         
         return $client->loginUser($testUser);
     }
 
-    public function testViewListUser()
+    public function getClientLoginAsAdmin()
+    {
+        $client = static::createClient();
+
+        $this->loadFixtures([UserFixtures::class]);
+        $testAdmin = static::$container->get(UserRepository::class)->findOneByUsername('admin');
+        
+        return $client->loginUser($testAdmin);
+    }
+
+    public function testSuccesfulViewListUser()
+    {
+        $client = $this->getClientLoginAsAdmin();
+        $crawler = $client->request('GET', '/users');
+
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
+    }
+
+    public function testFailViewListUser()
     {
         $client = $this->getClientLoginAsUser();
-
         $crawler = $client->request('GET', '/users');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     public function testCreateUser()
     {
-        $client = $this->getClientLoginAsUser();
+        $client = $this->getClientLoginAsAdmin();
 
         $crawler = $client->request('GET', '/users/create');
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -58,9 +74,17 @@ class UserControllerTest extends WebTestCase
         
     }
 
-    public function testFailCreateUserNameAlreadyExist()
+    public function testFailAccesCreateUser()
     {
         $client = $this->getClientLoginAsUser();
+        $crawler = $client->request('GET', '/users');
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+    }
+
+    public function testFailCreateUserNameAlreadyExist()
+    {
+        $client = $this->getClientLoginAsAdmin();
         $crawler = $client->request('GET', '/users/create');
 
         $form = $crawler->selectButton('Ajouter')->form([
@@ -77,7 +101,7 @@ class UserControllerTest extends WebTestCase
 
     public function testFailCreateUserEmailAlreadyExist()
     {
-        $client = $this->getClientLoginAsUser();
+        $client = $this->getClientLoginAsAdmin();
         $crawler = $client->request('GET', '/users/create');
         $this->assertResponseIsSuccessful();
     
@@ -95,15 +119,15 @@ class UserControllerTest extends WebTestCase
 
     public function testEditUser()
     {
-        $client = $this->getClientLoginAsUser();
+        $client = $this->getClientLoginAsAdmin();
         $crawler = $client->request('GET', '/users/3/edit');
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Modifier')->form([
-            'user[username]' => 'newUser1',
+            'user[username]' => 'newUser',
             'user[password][first]' => 'password',
             'user[password][second]' => 'password',
-            'user[email]' => 'newUser1@hotmail.fr'
+            'user[email]' => 'newUser@hotmail.fr'
         ]);
 
         $client->submit($form);

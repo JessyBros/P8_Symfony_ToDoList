@@ -15,6 +15,6 @@ class TaskRepositoryTest extends KernelTestCase
         $kernel = self::bootKernel();
         $this->loadFixtures([TaskFixtures::class]);
         $users = self::$container->get(TaskRepository::class)->count([]);
-        $this->assertEquals(5, $users);
+        $this->assertEquals(6, $users);
     }
 }
