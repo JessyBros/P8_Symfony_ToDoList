@@ -1,7 +1,6 @@
 # P8_Symfony_ToDoList
 PROJECT 8 ToDoList - Upgrade the quality code and add some fonctionnality of [ToDoList](https://github.com/saro0h/projet8-TodoList) project
 
-
 ## OBJECTIF 
 <https://openclassrooms.com/fr/paths/59/projects/44/assignment>
 
@@ -36,8 +35,8 @@ PROJECT 8 ToDoList - Upgrade the quality code and add some fonctionnality of [To
 ## Manipulate test
 
 ### Connect your project at your database test
-- Create a file ".env.test.local" in the same directory as ".env.test"
-- Insert the same connexion database at ".env" file and add the prefix "_test" at the end of your database name.
+  - Create a file ".env.test.local" in the same directory as ".env.test"
+  - Insert the same connexion database at ".env" file and add the prefix "_test" at the end of your database name.
 
 ### Create the database for test
 <code>composer prepare-test</code>
