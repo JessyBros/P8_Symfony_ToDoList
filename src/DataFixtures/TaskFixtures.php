@@ -12,9 +12,9 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $faker = Factory::create("fr_FR");
+        $faker = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 4; ++$i) {
             $task = new Task();
             $task->setTitle($faker->sentence(3));
             $task->setContent($faker->sentence(25));
@@ -24,7 +24,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
         }
 
         $adminTask = new Task();
-        $adminTask->setTitle("Task linked to administrator");
+        $adminTask->setTitle('Task linked to administrator');
         $adminTask->setContent("It's a demonstration, to check if this task is linked to administrator");
         $adminTask->setCreatedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
         $adminTask->toggle(0);
@@ -32,7 +32,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($adminTask);
 
         $userTask = new Task();
-        $userTask->setTitle("Task linked to user");
+        $userTask->setTitle('Task linked to user');
         $userTask->setContent("It's a demonstration, to check if this task is linked to user");
         $userTask->setCreatedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
         $userTask->toggle(0);
@@ -48,5 +48,4 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             UserFixtures::class,
         ];
     }
-
 }

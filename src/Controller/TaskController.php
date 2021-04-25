@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
-use App\Repository\TaskRepository;
-use App\Security\TaskVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +27,6 @@ class TaskController extends AbstractController
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository(Task::class)->findBy(['isDone' => 1])]);
     }
 
-
     /**
      * @Route("/tasks/create", name="task_create")
      */
@@ -39,9 +36,7 @@ class TaskController extends AbstractController
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
-        
         if ($form->isSubmitted() && $form->isValid()) {
-
             $task->setUser($this->getUser());
 
             $em->persist($task);
@@ -60,8 +55,7 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $em)
     {
-        
-        $this->denyAccessUnlessGranted("manage", $task);
+        $this->denyAccessUnlessGranted('manage', $task);
 
         $form = $this->createForm(TaskType::class, $task);
 
@@ -105,9 +99,9 @@ class TaskController extends AbstractController
     {
         $this->denyAccessUnlessGranted('manage', $task);
 
-            $em->remove($task);
-            $em->flush();
-            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        $em->remove($task);
+        $em->flush();
+        $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
     }
