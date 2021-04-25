@@ -36,11 +36,6 @@ class TaskController extends AbstractController
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 2988cc1611423d12ede3e5649567a7e2d3f0347f
         if ($form->isSubmitted() && $form->isValid()) {
             $task->setUser($this->getUser());
 
@@ -60,11 +55,7 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $em)
     {
-<<<<<<< HEAD
-        $this->denyAccessUnlessGranted("manage", $task);
-=======
         $this->denyAccessUnlessGranted('manage', $task);
->>>>>>> 2988cc1611423d12ede3e5649567a7e2d3f0347f
 
         $form = $this->createForm(TaskType::class, $task);
 
