@@ -6,8 +6,6 @@ use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TaskVoter extends Voter
 {
@@ -19,7 +17,7 @@ class TaskVoter extends Voter
         if (!in_array($attribute, [self::MANAGE])) {
             return false;
         }
-        
+
         if (!$task instanceof Task) {
             return false;
         }
@@ -30,7 +28,7 @@ class TaskVoter extends Voter
     protected function voteOnAttribute($attribute, $task, TokenInterface $token)
     {
         $user = $token->getUser();
-       
+
         if (!$user instanceof User) {
             return false;
         }
@@ -40,7 +38,7 @@ class TaskVoter extends Voter
                 return $this->canManage($task, $user);
                 break;
         }
-        
+
         throw new \LogicException('This code should not be reached!');
     }
 
@@ -50,7 +48,7 @@ class TaskVoter extends Voter
             return true;
         }
 
-        if ($task->getUser() == null && $user->getRoles() ==  ["ROLE_ADMIN"]) {
+        if (null == $task->getUser() && $user->getRoles() == ['ROLE_ADMIN']) {
             return true;
         }
 

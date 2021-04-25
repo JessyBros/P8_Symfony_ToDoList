@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
-use App\Repository\TaskRepository;
-use App\Security\TaskVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +27,6 @@ class TaskController extends AbstractController
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository(Task::class)->findBy(['isDone' => 1])]);
     }
 
-
     /**
      * @Route("/tasks/create", name="task_create")
      */
@@ -39,7 +36,11 @@ class TaskController extends AbstractController
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 2988cc1611423d12ede3e5649567a7e2d3f0347f
         if ($form->isSubmitted() && $form->isValid()) {
             $task->setUser($this->getUser());
 
@@ -59,7 +60,11 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $em)
     {
+<<<<<<< HEAD
         $this->denyAccessUnlessGranted("manage", $task);
+=======
+        $this->denyAccessUnlessGranted('manage', $task);
+>>>>>>> 2988cc1611423d12ede3e5649567a7e2d3f0347f
 
         $form = $this->createForm(TaskType::class, $task);
 
