@@ -35,8 +35,8 @@ PROJECT 8 ToDoList - Upgrade the quality code and add some fonctionnality of [To
 ## Manipulate test
 
 ### Connect your project at your database test
-  - Create a file ".env.test.local" in the same directory as ".env.test"
-  - Insert the same connexion database at ".env" file and add the prefix "_test" at the end of your database name.
+-   Create a file ".env.test.local" in the same directory as ".env.test"
+-   Insert the same connexion database at ".env" file and add the prefix "_test" at the end of your database name.
 
 ### Create the database for test
 <code>composer prepare-test</code>
