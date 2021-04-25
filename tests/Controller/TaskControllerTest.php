@@ -35,7 +35,6 @@ class TaskControllerTest extends WebTestCase
         return $client->loginUser($testAdmin);
     }
 
-
     public function testViewListTask()
     {
         $client = $this->getClientLoginAsUser();
@@ -74,14 +73,6 @@ class TaskControllerTest extends WebTestCase
         $testUser = static::$container->get(UserRepository::class)->findOneByUsername('user');
         $this->assertSame($testUser->getId(), $taskCreated->getUser()->getId());
 
-    }
-
-    public function testTaskNotFound()
-    {
-        $client = $this->getClientLoginAsUser();
-        
-        $crawler = $client->request('GET', '/tasks/57/edit');
-        $this->assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
     }
 
     public function testTaskNotFound()
