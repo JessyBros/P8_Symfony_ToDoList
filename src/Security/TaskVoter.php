@@ -16,7 +16,7 @@ class TaskVoter extends Voter
     protected function supports(string $attribute, $task)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::MANAGE,"test"])) {
+        if (!in_array($attribute, [self::MANAGE])) {
             return false;
         }
         
