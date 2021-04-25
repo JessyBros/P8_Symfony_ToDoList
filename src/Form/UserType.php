@@ -39,7 +39,7 @@ class UserType extends AbstractType
             ])
         ;
 
-         // Data transformer
+        // Data transformer
         $builder->get('roles')
         ->addModelTransformer(new CallbackTransformer(
             function ($rolesArray) {

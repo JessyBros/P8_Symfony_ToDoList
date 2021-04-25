@@ -41,7 +41,6 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-
             $task->setUser($this->getUser());
 
             $em->persist($task);
@@ -60,7 +59,6 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $em)
     {
-        
         $this->denyAccessUnlessGranted("manage", $task);
 
         $form = $this->createForm(TaskType::class, $task);
@@ -105,9 +103,9 @@ class TaskController extends AbstractController
     {
         $this->denyAccessUnlessGranted('manage', $task);
 
-            $em->remove($task);
-            $em->flush();
-            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        $em->remove($task);
+        $em->flush();
+        $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
     }

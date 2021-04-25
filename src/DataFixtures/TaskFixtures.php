@@ -48,5 +48,4 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             UserFixtures::class,
         ];
     }
-
 }
