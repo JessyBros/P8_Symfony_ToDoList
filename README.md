@@ -1,4 +1,7 @@
 # P8_Symfony_ToDoList
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bbd00fac4cae488cbafaf83269af7ce2)](https://app.codacy.com/gh/SiProdZz/P8_Symfony_ToDoList?utm_source=github.com&utm_medium=referral&utm_content=SiProdZz/P8_Symfony_ToDoList&utm_campaign=Badge_Grade_Settings)
+
 PROJECT 8 ToDoList - Upgrade the quality code and add some fonctionnality of [ToDoList](https://github.com/saro0h/projet8-TodoList) project
 
 ## OBJECTIF 
