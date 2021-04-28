@@ -29,7 +29,6 @@
 /public/bundles/
 /var/
 /vendor/
-/coverage/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
